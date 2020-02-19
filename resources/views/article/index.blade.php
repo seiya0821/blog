@@ -2,12 +2,14 @@
 <html lang = "ja">
     <head>
       <div class="container-fluid pr-0 pl-0">
-      <nav class="navbar navbar-expand-md navbar-dark bg-info mt-3 mb-3">
+       <ul class="navbar-nav mr-auto">
+       <nav class="navbar navbar-expand-md navbar-dark bg-info mt-3 p-4">
          <a class="navbar-brand" href="/"><h2>Blog</h2></a>
             <div class="col-md-6">
               <form action= "/search" method= "get">
+               {{ csrf_field() }}
                 <div class="input-group">
-                  <input type="search" name="search" class="form-control">
+                  <input type="text" name="search" value="@if (isset($search)) {{$search}} @endif" class="form-control" placeholder="検索ワードを入力してください">
                     <span class="input-group-prepend">
                     <button type="submit" class="btn btn-primary">Search</button>
                     </span>
@@ -15,20 +17,54 @@
               </form>
           </div>
           <div><a href="/create" class="btn btn-primary">New Create</a></div>
-       </nav>
+          @guest
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+            </li>
+          @if (Route::has('register'))
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+            </li>
+          @endif
+        </ul>
+                        
+          @else
+          <ul class="navbar-nav">          
+            <li class="nav-item dropdown">
+              <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                {{ Auth::user()->name }} <span class="caret"></span>
+              </a>
+
+               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{{ route('logout') }}"
+                    onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();">
+                      {{ __('Logout') }}
+                  </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                      @csrf
+                    </form>
+                </div>
+            </li>
+          </ul>             
+          @endguest  
+  </nav>
+                        
       </div>
       <meta charaset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
   </head>
+  <h5 div class="card-title"></h5>
   <body class="p-4">
     <a class="text-info" href="/"><h1>Index</h1></a>
   <ul class= "text-right">  
-  <select onChange="location.href=value;">
-    <option value="/">default</option>
-    <option value="./?sort=desc">new</option>
-    <option value="./?sort=asc">old</option>
-　</select>
+   <select onChange="location.href=value;">
+     <option value="/">選択してください</option>
+     <option value="./?sort=desc">new</option>
+     <option value="./?sort=asc">old</option>
+　 </select>
   </ul>
     @foreach ($articles as $article)
     <div class="card mb-2">

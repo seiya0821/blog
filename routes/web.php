@@ -11,11 +11,29 @@
 |
 */
 
-Route::get('/', 'ArticleController@index');
-Route::get('create','ArticleController@create');
-Route::post('create', 'ArticleController@store');
-Route::get('edit/{id}', 'ArticleController@edit');
-Route::post('edit', 'ArticleController@update');
-Route::get('delete/{id}', 'ArticleController@show');
-Route::post('delete', 'ArticleController@delete');
-Route::get('/search', 'ArticleController@Search');
+// Route::get('/', 'ArticleController@index');
+// Route::get('create','ArticleController@create');
+// Route::post('create', 'ArticleController@store');
+// Route::get('edit/{id}', 'ArticleController@edit');
+// Route::post('edit', 'ArticleController@update');
+// Route::get('delete/{id}', 'ArticleController@show');
+// Route::post('delete', 'ArticleController@delete');
+// Route::get('/search', 'ArticleController@Search');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('create','ArticleController@create');
+    Route::post('create', 'ArticleController@store');
+    Route::get('/', 'ArticleController@index');
+    Route::get('create','ArticleController@create');
+    Route::post('create', 'ArticleController@store');
+    Route::get('edit/{id}', 'ArticleController@edit');
+    Route::post('edit', 'ArticleController@update');
+    Route::get('delete/{id}', 'ArticleController@show');
+    Route::post('delete', 'ArticleController@delete');
+    Route::get('/search', 'ArticleController@Search');
+
+ });
